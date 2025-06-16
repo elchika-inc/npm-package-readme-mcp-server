@@ -174,8 +174,8 @@ export const createCacheKey = {
   searchResults: (query: string, limit: number, quality?: number, popularity?: number): string => {
     const queryHash = Buffer.from(query).toString('base64');
     const params = [queryHash, limit.toString()];
-    if (quality !== undefined) params.push(`q:${quality}`);
-    if (popularity !== undefined) params.push(`p:${popularity}`);
+    if (quality !== undefined) {params.push(`q:${quality}`);}
+    if (popularity !== undefined) {params.push(`p:${popularity}`);}
     return `search:${params.join(':')}`;
   },
   

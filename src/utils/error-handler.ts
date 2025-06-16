@@ -39,10 +39,11 @@ export function handleHttpError(status: number, response: Response, context: str
   switch (status) {
     case 404:
       throw new PackageNotFoundError(context);
-    case 429:
+    case 429: {
       const retryAfter = response.headers.get('retry-after');
       const retryAfterSeconds = retryAfter ? parseInt(retryAfter, 10) : undefined;
       throw new RateLimitError(context, retryAfterSeconds);
+    }
     case 500:
     case 502:
     case 503:
@@ -63,7 +64,7 @@ export async function withRetry<T>(
   baseDelay: number = 1000,
   context: string = 'operation'
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | undefined;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
@@ -96,7 +97,10 @@ export async function withRetry<T>(
     }
   }
 
-  throw lastError!;
+  if (lastError) {
+    throw lastError;
+  }
+  throw new Error('All retry attempts failed without capturing an error');
 }
 
 function sleep(ms: number): Promise<void> {

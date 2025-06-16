@@ -62,10 +62,10 @@ export class GitHubApiClient {
     try {
       // Handle various GitHub URL formats
       const patterns = [
-        /^https?:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?(?:\/.*)?$/,
-        /^git\+https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?(?:\/.*)?$/,
-        /^git:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?(?:\/.*)?$/,
-        /^git@github\.com:([^\/]+)\/([^\/]+?)(?:\.git)?(?:\/.*)?$/,
+        /^https?:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?(?:\/.*)?$/,
+        /^git\+https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?(?:\/.*)?$/,
+        /^git:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?(?:\/.*)?$/,
+        /^git@github\.com:([^/]+)\/([^/]+?)(?:\.git)?(?:\/.*)?$/,
       ];
 
       for (const pattern of patterns) {

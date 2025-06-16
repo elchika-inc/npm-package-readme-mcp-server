@@ -1,11 +1,11 @@
 {
-  "name": "package-readme-mcp-server",
+  "name": "npm-package-readme-mcp-server",
   "version": "0.1.2",
   "description": "MCP server for fetching npm package README and usage information",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "package-readme-mcp-server": "dist/index.js"
+    "npm-package-readme-mcp-server": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",

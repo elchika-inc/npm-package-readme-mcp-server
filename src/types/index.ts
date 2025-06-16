@@ -64,14 +64,14 @@ export interface PackageSearchResult {
 
 // Tool Parameters
 export interface GetPackageReadmeParams {
-  package_name: string;    // パッケージ名（必須）
-  version?: string;        // バージョン指定（オプション、デフォルト: "latest"）
-  include_examples?: boolean; // 使用例を含めるか（オプション、デフォルト: true）
+  package_name: string;    // Package name (required)
+  version?: string;        // Version specification (optional, default: "latest")
+  include_examples?: boolean; // Whether to include examples (optional, default: true)
 }
 
 export interface GetPackageInfoParams {
   package_name: string;
-  include_dependencies?: boolean; // 依存関係を含めるか（デフォルト: true）
+  include_dependencies?: boolean; // Whether to include dependencies (default: true)
   include_dev_dependencies?: boolean; // 開発依存関係を含めるか（デフォルト: false）
 }
 
