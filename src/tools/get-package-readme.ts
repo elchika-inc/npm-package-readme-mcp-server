@@ -32,6 +32,36 @@ export async function getPackageReadme(params: GetPackageReadmeParams): Promise<
   }
 
   try {
+    // First, check if package exists
+    logger.debug(`Checking package existence: ${package_name}`);
+    const packageExists = await npmRegistry.packageExists(package_name);
+    
+    if (!packageExists) {
+      logger.warn(`Package not found: ${package_name}`);
+      return {
+        package_name,
+        version: version || 'latest',
+        description: 'Package not found',
+        readme_content: '',
+        usage_examples: [],
+        installation: {
+          command: `install ${package_name}`,
+          alternatives: [`yarn add ${package_name}`, `pnpm add ${package_name}`],
+        },
+        basic_info: {
+          name: package_name,
+          version: version || 'latest',
+          description: 'Package not found',
+          license: 'Unknown',
+          author: 'Unknown',
+          keywords: [],
+        },
+        exists: false,
+      };
+    }
+    
+    logger.debug(`Package exists: ${package_name}`);
+
     // Get package info from npm registry
     const packageInfo = await npmRegistry.getPackageInfo(package_name);
     const versionInfo = await npmRegistry.getVersionInfo(package_name, version);
@@ -67,9 +97,8 @@ export async function getPackageReadme(params: GetPackageReadmeParams): Promise<
 
     // Create installation info
     const installation: InstallationInfo = {
-      npm: `npm install ${package_name}`,
-      yarn: `yarn add ${package_name}`,
-      pnpm: `pnpm add ${package_name}`,
+      command: `install ${package_name}`,
+      alternatives: [`yarn add ${package_name}`, `pnpm add ${package_name}`],
     };
 
     // Create basic info
@@ -107,6 +136,7 @@ export async function getPackageReadme(params: GetPackageReadmeParams): Promise<
       installation,
       basic_info: basicInfo,
       repository: repository || undefined,
+      exists: true,
     };
 
     // Cache the response

@@ -29,6 +29,30 @@ export async function getPackageInfo(params: GetPackageInfoParams): Promise<Pack
   }
 
   try {
+    // First, check if package exists
+    logger.debug(`Checking package existence: ${package_name}`);
+    const packageExists = await npmRegistry.packageExists(package_name);
+    
+    if (!packageExists) {
+      logger.warn(`Package not found: ${package_name}`);
+      return {
+        package_name,
+        latest_version: 'unknown',
+        description: 'Package not found',
+        author: 'Unknown',
+        license: 'Unknown',
+        keywords: [],
+        download_stats: {
+          last_day: 0,
+          last_week: 0,
+          last_month: 0,
+        },
+        exists: false,
+      };
+    }
+    
+    logger.debug(`Package exists: ${package_name}`);
+
     // Get package info from npm registry
     const packageInfo = await npmRegistry.getPackageInfo(package_name);
     
@@ -100,6 +124,7 @@ export async function getPackageInfo(params: GetPackageInfoParams): Promise<Pack
       dev_dependencies: devDependencies || undefined,
       download_stats: downloadStats,
       repository: repository || undefined,
+      exists: true,
     };
 
     // Cache the response

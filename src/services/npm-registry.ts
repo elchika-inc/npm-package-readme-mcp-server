@@ -18,6 +18,19 @@ export class NpmRegistryClient {
     this.timeout = timeout || 30000;
   }
 
+  async packageExists(packageName: string): Promise<boolean> {
+    try {
+      await this.getPackageInfo(packageName);
+      return true;
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('404')) {
+        return false;
+      }
+      // For other errors, assume package might exist but there's a temporary issue
+      throw error;
+    }
+  }
+
   async getPackageInfo(packageName: string): Promise<NpmPackageInfo> {
     const url = `${this.baseUrl}/${encodeURIComponent(packageName)}`;
     

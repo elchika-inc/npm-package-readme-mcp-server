@@ -6,9 +6,8 @@ export interface UsageExample {
 }
 
 export interface InstallationInfo {
-  npm: string;      // "npm install package-name"
-  yarn?: string;    // "yarn add package-name"
-  pnpm?: string;    // "pnpm add package-name"
+  command: string; // "install package-name"
+  alternatives?: string[]; // 他のパッケージマネージャーでのインストール方法
 }
 
 export interface AuthorInfo {
@@ -92,6 +91,7 @@ export interface PackageReadmeResponse {
   installation: InstallationInfo;
   basic_info: PackageBasicInfo;
   repository?: RepositoryInfo | undefined;
+  exists: boolean; // パッケージが存在するか
 }
 
 export interface PackageInfoResponse {
@@ -105,6 +105,7 @@ export interface PackageInfoResponse {
   dev_dependencies?: Record<string, string> | undefined;
   download_stats: DownloadStats;
   repository?: RepositoryInfo | undefined;
+  exists: boolean; // パッケージが存在するか
 }
 
 export interface SearchPackagesResponse {
