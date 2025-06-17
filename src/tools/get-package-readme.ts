@@ -32,12 +32,17 @@ export async function getPackageReadme(params: GetPackageReadmeParams): Promise<
   }
 
   try {
-    // First, check if package exists
-    logger.debug(`Checking package existence: ${package_name}`);
-    const packageExists = await npmRegistry.packageExists(package_name);
+    // Get package info from npm registry directly
+    let packageInfo;
+    let versionInfo;
     
-    if (!packageExists) {
-      logger.warn(`Package not found: ${package_name}`);
+    try {
+      logger.debug(`Getting package info for: ${package_name}`);
+      packageInfo = await npmRegistry.getPackageInfo(package_name);
+      versionInfo = await npmRegistry.getVersionInfo(package_name, version);
+    } catch (error) {
+      // If package not found, return a response indicating non-existence
+      logger.debug(`Package not found: ${package_name}`);
       return {
         package_name,
         version: version || 'latest',
@@ -60,11 +65,7 @@ export async function getPackageReadme(params: GetPackageReadmeParams): Promise<
       };
     }
     
-    logger.debug(`Package exists: ${package_name}`);
-
-    // Get package info from npm registry
-    const packageInfo = await npmRegistry.getPackageInfo(package_name);
-    const versionInfo = await npmRegistry.getVersionInfo(package_name, version);
+    logger.debug(`Package info retrieved for: ${package_name}`);
 
     // Get actual version string (in case we requested 'latest')
     const actualVersion = versionInfo.version;

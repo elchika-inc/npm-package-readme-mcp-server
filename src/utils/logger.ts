@@ -15,47 +15,13 @@ class Logger {
     } else {
       this.logLevel = logLevel ?? LogLevel.INFO;
     }
+    // Suppress unused variable warning
+    void this.logLevel;
   }
 
-  private log(level: LogLevel, message: string, data?: unknown): void {
-    if (level > this.logLevel) {
-      return;
-    }
-
-    const timestamp = new Date();
-    const levelName = LogLevel[level];
-    const logMessage = `[${timestamp.toISOString()}] ${levelName}: ${message}`;
-
-    switch (level) {
-      case LogLevel.ERROR:
-        if (data) {
-          console.error(logMessage, data);
-        } else {
-          console.error(logMessage);
-        }
-        break;
-      case LogLevel.WARN:
-        if (data) {
-          console.warn(logMessage, data);
-        } else {
-          console.warn(logMessage);
-        }
-        break;
-      case LogLevel.INFO:
-        if (data) {
-          console.info(logMessage, data);
-        } else {
-          console.info(logMessage);
-        }
-        break;
-      case LogLevel.DEBUG:
-        if (data) {
-          console.debug(logMessage, data);
-        } else {
-          console.debug(logMessage);
-        }
-        break;
-    }
+  private log(_level: LogLevel, _message: string, _data?: unknown): void {
+    // Disable all console output for MCP servers to prevent JSON-RPC corruption
+    return;
   }
 
   error(message: string, data?: unknown): void {
