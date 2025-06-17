@@ -75,4 +75,4 @@ class Logger {
   }
 }
 
-export const logger = new Logger(LogLevel.WARN);
+export const logger = new Logger(LogLevel.INFO);
