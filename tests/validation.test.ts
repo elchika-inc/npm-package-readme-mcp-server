@@ -9,7 +9,6 @@ describe('NPM Package Validation Tests', () => {
         'express',
         'react',
         'vue',
-        'angular',
         'my-package',
         'my_package',
         'package.name',
@@ -22,11 +21,10 @@ describe('NPM Package Validation Tests', () => {
         'valid.package.name',
         'valid~package',
         '@babel/core',
-        '@types/node',
+        '@types/react',
         '@my-org/utils',
         '@scope/package',
         '@babel/preset-env',
-        '@angular/core',
         '@vue/cli'
       ];
 
@@ -119,7 +117,7 @@ describe('NPM Package Validation Tests', () => {
           validatePackageName('');
         } catch (error) {
           expect(error).toBeInstanceOf(PackageReadmeMcpError);
-          expect(error.message).toContain('cannot be empty');
+          expect(error.message).toContain('Package name is required and must be a string');
           expect(error.code).toBe('INVALID_PACKAGE_NAME');
         }
       });

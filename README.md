@@ -1,75 +1,110 @@
-# npm-package-readme-mcp-server
+# npm Package README MCP Server
 
+[![license](https://img.shields.io/npm/l/npm-package-readme-mcp-server)](https://github.com/elchika-inc/npm-package-readme-mcp-server/blob/main/LICENSE)
 [![npm version](https://img.shields.io/npm/v/npm-package-readme-mcp-server)](https://www.npmjs.com/package/npm-package-readme-mcp-server)
 [![npm downloads](https://img.shields.io/npm/dm/npm-package-readme-mcp-server)](https://www.npmjs.com/package/npm-package-readme-mcp-server)
-[![GitHub stars](https://img.shields.io/github/stars/naoto24kawa/npm-package-readme-mcp-server)](https://github.com/naoto24kawa/npm-package-readme-mcp-server)
-[![GitHub issues](https://img.shields.io/github/issues/naoto24kawa/npm-package-readme-mcp-server)](https://github.com/naoto24kawa/npm-package-readme-mcp-server/issues)
-[![license](https://img.shields.io/npm/l/npm-package-readme-mcp-server)](https://github.com/naoto24kawa/npm-package-readme-mcp-server/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/elchika-inc/npm-package-readme-mcp-server)](https://github.com/elchika-inc/npm-package-readme-mcp-server)
 
-An MCP server that retrieves README files and usage information for npm packages from the official npm registry.
+An MCP (Model Context Protocol) server that enables AI assistants to fetch comprehensive information about npm packages from the npm registry, including README content, package metadata, and search functionality.
 
 ## Features
 
-- **get_package_readme**: Retrieve README and usage examples for npm packages
-- **get_package_info**: Get basic information and dependencies for npm packages  
-- **search_packages**: Search for npm packages
+- **Package README Retrieval**: Fetch formatted README content with usage examples from Node.js/npm packages hosted on npm registry
+- **Package Information**: Get comprehensive package metadata including dependencies, versions, statistics, and maintainer information
+- **Package Search**: Search npm registry with advanced filtering by package type, popularity, and relevance
+- **Smart Caching**: Intelligent caching system to optimize API usage and improve response times
+- **GitHub Integration**: Seamless integration with GitHub API for enhanced README fetching when packages link to GitHub repositories
+- **Error Handling**: Robust error handling with automatic retry logic and fallback strategies
 
-## Installation
+## MCP Client Configuration
 
-```bash
-npm install -g npm-package-readme-mcp-server
-```
-
-## Setup
-
-Add the following to your MCP client configuration file:
-
-```json
-{
-  "mcpServers": {
-    "npm-package-readme": {
-      "command": "npm-package-readme-mcp-server"
-    }
-  }
-}
-```
-
-Alternative using npx:
+Add this server to your MCP client configuration:
 
 ```json
 {
   "mcpServers": {
     "npm-package-readme": {
       "command": "npx",
-      "args": ["npm-package-readme-mcp-server"]
+      "args": ["npm-package-readme-mcp-server"],
+      "env": {
+        "GITHUB_TOKEN": "your_github_token_here"
+      }
     }
   }
 }
 ```
 
-## Usage
+> **Note**: The `GITHUB_TOKEN` is optional but recommended for higher API rate limits when fetching README content from GitHub.
 
-### Get Package README
+## Available Tools
 
-```
-get_package_readme({ "package_name": "react" })
-```
+### get_package_readme
 
-### Get Package Information
+Retrieves comprehensive README content and usage examples for npm packages.
 
-```
-get_package_info({ "package_name": "express" })
-```
-
-### Search Packages
-
-```
-search_packages({ "query": "testing framework", "limit": 10 })
+**Parameters:**
+```json
+{
+  "package_name": "react",
+  "version": "latest",
+  "include_examples": true
+}
 ```
 
-## Environment Variables
+- `package_name` (string, required): npm package name
+- `version` (string, optional): Specific package version or "latest" (default: "latest")
+- `include_examples` (boolean, optional): Include usage examples and code snippets (default: true)
 
-- `LOG_LEVEL`: Log level (ERROR, WARN, INFO, DEBUG)
-- `CACHE_TTL`: Cache expiration time (seconds)
-- `REQUEST_TIMEOUT`: Request timeout (milliseconds)
-- `GITHUB_TOKEN`: GitHub API token (optional, to avoid rate limits)
+**Returns:** Formatted README content with installation instructions, usage examples, and API documentation.
+
+### get_package_info
+
+Fetches detailed package metadata, dependencies, and statistics from npm registry.
+
+**Parameters:**
+```json
+{
+  "package_name": "express",
+  "include_dependencies": true,
+  "include_dev_dependencies": false
+}
+```
+
+- `package_name` (string, required): npm package name
+- `include_dependencies` (boolean, optional): Include runtime dependencies (default: true)
+- `include_dev_dependencies` (boolean, optional): Include development dependencies (default: false)
+
+**Returns:** Package metadata including version info, maintainers, license, download stats, and dependency tree.
+
+### search_packages
+
+Searches npm registry for packages with advanced filtering capabilities.
+
+**Parameters:**
+```json
+{
+  "query": "testing framework jest",
+  "limit": 20,
+  "quality": 0.8
+}
+```
+
+- `query` (string, required): Search terms (package name, description, keywords)
+- `limit` (number, optional): Maximum number of results to return (default: 20, max: 250)
+- `quality` (number, optional): Minimum quality score filter (0-1)
+
+**Returns:** List of matching packages with names, descriptions, download counts, and relevance scores.
+
+## Error Handling
+
+The server handles common error scenarios gracefully:
+
+- **Package not found**: Returns clear error messages with package name suggestions
+- **Rate limiting**: Implements automatic retry with exponential backoff
+- **Network timeouts**: Configurable timeout with retry logic
+- **Invalid package names**: Validates package name format and provides guidance
+- **GitHub API failures**: Fallback strategies when GitHub integration fails
+
+## License
+
+MIT
