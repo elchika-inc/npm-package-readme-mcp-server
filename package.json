@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.1",
-    "@elchika-inc/package-readme-shared-base": "file:../shared-base"
+    "@elchika-inc/package-readme-shared": "file:../shared"
   },
   "devDependencies": {
     "@types/bun": "^1.0.0",
