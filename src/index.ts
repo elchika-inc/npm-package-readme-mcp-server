@@ -8,7 +8,7 @@ async function main(): Promise<void> {
   let server: PackageReadmeMcpServer | null = null;
 
   try {
-    logger.info('Initializing package-readme-mcp server');
+    logger.info('Initializing npm package README MCP server');
     
     // Create and start the server
     server = new PackageReadmeMcpServer();
