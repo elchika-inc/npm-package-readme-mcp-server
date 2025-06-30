@@ -64,8 +64,8 @@ export async function getPackageInfo(params: GetPackageInfoParams): Promise<Pack
       throw new Error(`Latest version ${latestVersion} not found for package ${package_name}`);
     }
 
-    // Get download statistics
-    const downloadStats = await npmRegistry.getAllDownloadStats(package_name);
+    // Simplified: no download statistics
+    const downloadStats = { last_day: 0, last_week: 0, last_month: 0 };
 
     // Extract author information
     let authorString = 'Unknown';

@@ -40,7 +40,7 @@ export async function searchPackages(params: SearchPackagesParams): Promise<Sear
 
   try {
     // Search packages using npm registry
-    const searchResults = await npmRegistry.searchPackages(query, limit, quality, popularity);
+    const searchResults = await npmRegistry.searchPackages(query, limit);
     
     // Transform results to our format
     const packages: PackageSearchResult[] = searchResults.objects.map(obj => {

@@ -30,6 +30,7 @@ export class MemoryCache {
     // Check if adding this entry would exceed max size
     if (this.wouldExceedMaxSize(key, entry)) {
       this.evictLeastRecentlyUsed();
+      // If still too large after one eviction, just proceed (entry is too large for cache)
     }
 
     this.cache.set(key, entry);
@@ -121,8 +122,12 @@ export class MemoryCache {
   }
 
   private evictLeastRecentlyUsed(): void {
+    if (this.cache.size === 0) {
+      return; // No entries to evict
+    }
+
     let oldestKey: string | null = null;
-    let oldestTimestamp = Date.now();
+    let oldestTimestamp = Number.MAX_SAFE_INTEGER;
 
     for (const [key, entry] of this.cache.entries()) {
       if (entry.timestamp < oldestTimestamp) {
